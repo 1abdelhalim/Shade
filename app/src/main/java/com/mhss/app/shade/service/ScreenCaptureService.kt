@@ -308,10 +308,20 @@ class ScreenCaptureService : Service() {
         val displayW = bounds.width().coerceAtLeast(1)
         val displayH = bounds.height().coerceAtLeast(1)
 
-        val newWidth = detector.tensorWidth.coerceAtLeast(1)
-        val baseHeight = detector.tensorHeight.coerceAtLeast(1)
-        val newHeight = ((baseHeight.toFloat() * displayH.toFloat()) / displayW.toFloat()).toInt()
-            .coerceAtLeast(1)
+        val tensorWidth = detector.tensorWidth
+        val tensorHeight = detector.tensorHeight
+        val baseDim = minOf(tensorWidth, tensorHeight).coerceAtLeast(1)
+        val newWidth: Int
+        val newHeight: Int
+        if (displayW > displayH) {
+            newHeight = baseDim
+            newWidth = ((baseDim.toFloat() * displayW.toFloat()) / displayH.toFloat()).toInt()
+                .coerceAtLeast(1)
+        } else {
+            newWidth = baseDim
+            newHeight = ((baseDim.toFloat() * displayH.toFloat()) / displayW.toFloat()).toInt()
+                .coerceAtLeast(1)
+        }
 
         val changed = force ||
                 newWidth != screenWidth ||
