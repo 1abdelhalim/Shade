@@ -28,13 +28,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mhss.app.shade.R
+import com.mhss.app.shade.service.CaptureState
 
 @Composable
 fun CaptureStatusCard(
-    isCapturing: Boolean,
+    captureState: CaptureState,
     onStartCapture: () -> Unit,
     onStopCapture: () -> Unit
 ) {
+    val isRunning = captureState == CaptureState.RUNNING
+    val isInitializing = captureState == CaptureState.INITIALIZING
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -58,17 +62,21 @@ fun CaptureStatusCard(
                         .size(12.dp)
                         .clip(CircleShape)
                         .background(
-                            if (isCapturing)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.outline
+                            when (captureState) {
+                                CaptureState.RUNNING -> MaterialTheme.colorScheme.primary
+                                CaptureState.INITIALIZING -> MaterialTheme.colorScheme.tertiary
+                                CaptureState.IDLE -> MaterialTheme.colorScheme.outline
+                            }
                         )
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(
-                        if (isCapturing) R.string.screen_capture_active
-                        else R.string.screen_capture_inactive
+                        when (captureState) {
+                            CaptureState.RUNNING -> R.string.screen_capture_active
+                            CaptureState.INITIALIZING -> R.string.screen_capture_initializing
+                            CaptureState.IDLE -> R.string.screen_capture_inactive
+                        }
                     ),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
@@ -76,19 +84,20 @@ fun CaptureStatusCard(
             }
             Spacer(modifier = Modifier.height(16.dp))
             FilledTonalButton(
-                onClick = if (isCapturing) onStopCapture else onStartCapture,
+                onClick = if (isRunning) onStopCapture else onStartCapture,
+                enabled = !isInitializing,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Icon(
-                    imageVector = if (isCapturing) Icons.Rounded.Stop else Icons.Rounded.PlayArrow,
+                    imageVector = if (isRunning) Icons.Rounded.Stop else Icons.Rounded.PlayArrow,
                     contentDescription = null,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(
-                        if (isCapturing) R.string.stop_capture else R.string.start_capture
+                        if (isRunning) R.string.stop_capture else R.string.start_capture
                     )
                 )
             }

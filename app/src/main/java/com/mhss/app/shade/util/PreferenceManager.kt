@@ -28,7 +28,9 @@ class PreferenceManager(private val context: Context) {
         private val PERFORMANCE_MODE = booleanPreferencesKey("power_mode_enabled")
         private val OVERLAY_OPACITY = floatPreferencesKey("overlay_opacity")
         private val FULL_SCREEN_MODE = booleanPreferencesKey("full_screen_mode_enabled")
-        private val HAS_SHOWN_INITIAL_DIALOG = booleanPreferencesKey("has_shown_unsupported_dialog")
+        private val HAS_COMPLETED_ONBOARDING_FLOW = booleanPreferencesKey("has_completed_onboarding_flow")
+        private val HAS_SHOWN_UNSUPPORTED_DEVICE_DIALOG = booleanPreferencesKey("has_shown_unsupported_device_dialog")
+        private val HAS_SEEN_SINGLE_APP_CAPTURE_TIP = booleanPreferencesKey("has_seen_single_app_capture_tip")
         private val AUTO_START_APPS = stringSetPreferencesKey("auto_start_apps")
         private val PIXELATION_LEVEL = intPreferencesKey("pixelation_level")
         private val DETAILED_MODE = booleanPreferencesKey("detailed_mode_enabled")
@@ -117,15 +119,39 @@ class PreferenceManager(private val context: Context) {
         }
     }
 
-    suspend fun setHasShownInitialDialog(shown: Boolean) {
+    suspend fun setHasCompletedOnboardingFlow(completed: Boolean) {
         context.dataStore.edit { preferences ->
-            preferences[HAS_SHOWN_INITIAL_DIALOG] = shown
+            preferences[HAS_COMPLETED_ONBOARDING_FLOW] = completed
         }
     }
 
-    suspend fun hasShownInitialDialog(): Boolean {
+    suspend fun hasCompletedOnboardingFlow(): Boolean {
         return context.dataStore.data
-            .map { preferences -> preferences[HAS_SHOWN_INITIAL_DIALOG] ?: false }
+            .map { preferences -> preferences[HAS_COMPLETED_ONBOARDING_FLOW] ?: false }
+            .first()
+    }
+
+    suspend fun setHasShownUnsupportedDeviceDialog(shown: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[HAS_SHOWN_UNSUPPORTED_DEVICE_DIALOG] = shown
+        }
+    }
+
+    suspend fun hasShownUnsupportedDeviceDialog(): Boolean {
+        return context.dataStore.data
+            .map { preferences -> preferences[HAS_SHOWN_UNSUPPORTED_DEVICE_DIALOG] ?: false }
+            .first()
+    }
+
+    suspend fun setHasSeenSingleAppCaptureTip(seen: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[HAS_SEEN_SINGLE_APP_CAPTURE_TIP] = seen
+        }
+    }
+
+    suspend fun hasSeenSingleAppCaptureTip(): Boolean {
+        return context.dataStore.data
+            .map { preferences -> preferences[HAS_SEEN_SINGLE_APP_CAPTURE_TIP] ?: false }
             .first()
     }
 

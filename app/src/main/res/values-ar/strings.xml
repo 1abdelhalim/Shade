@@ -26,10 +26,13 @@
     <string name="accessibility_service_required">يرجى تفعيل خدمة إمكانية الوصول في الإعدادات أولاً</string>
     <string name="tile_label">بدء Shade</string>
     <string name="notification_title">خدمة التقاط الشاشة</string>
+    <string name="notification_title_initializing">جارِ تجهيز النموذج</string>
     <string name="notification_text">جاري التقاط الشاشة للمعالجة…</string>
+    <string name="notification_text_initializing">جارٍ تجهيز النموذج. قد يستغرق ذلك بضع دقائق في المرة الأولى، وتكون المرات التالية أسرع غالبًا.</string>
     <string name="notification_action_stop">إيقاف</string>
     <string name="notification_action_clear">مسح</string>
     <string name="notification_channel_name">التقاط الشاشة</string>
+    <string name="notification_channel_name_initializing">تجهيز النموذج</string>
     <string name="accessibility_service_description">يستخدم Shade خدمة إمكانية الوصول هذه لعرض الغطاء بشكل معتم بالكامل. في أندرويد 12 وما فوق، الأغطية العادية محدودة بشفافية 80%، مما قد لا يخفي المحتوى المكتشف بالكامل. تفعيل هذه الخدمة يسمح لـ Shade بعرض الغطاء بأي مستوى شفافية تختاره.\n\nيتم التقاط محتوى الشاشة للمعالجة على الجهاز فقط. لا يتم إرسال أي بيانات لأي مكان — لا يملك التطبيق إذن الإنترنت.</string>
     <string name="permission_setup_title">لنبدأ</string>
     <string name="permission_setup_subtitle">يحتاج Shade لبعض الأذونات ليعمل</string>
@@ -40,10 +43,10 @@
     <string name="permission_notification_description">مطلوب لإبقاء Shade يعمل في الخلفية. ستظهر لك أيضاً أزرار لإيقاف أو مسح الغطاء بسرعة.</string>
     <string name="single_app_recording_unsupported_banner">تسجيل التطبيق الواحد غير مدعوم على هذا الجهاز. سيتم استخدام وضع الشاشة الكاملة التجريبي.</string>
     <string name="device_not_supported_title">جهاز غير مدعوم</string>
-    <string name="single_app_recording_unsupported_dialog">تسجيل التطبيق الواحد غير مدعوم على هذا الجهاز. سيستخدم Shade وضع ملء الشاشة التجريبي بدلاً من ذلك. قد لا يوفر هذا الوضع أفضل تجربة وجودة.</string>
+    <string name="single_app_recording_unsupported_dialog">تسجيل التطبيق الواحد غير مدعوم على هذا الجهاز. سيتم استخدام وضع الشاشة الكاملة التجريبي بدلاً من ذلك. لا يوفر هذا الوضع أفضل تجربة وجودة.</string>
     <string name="understand">فهمت</string>
     <string name="auto_start_apps">تشغيل تلقائي</string>
-    <string name="auto_start_apps_description">بدء Shade تلقائياً عند فتح تطبيقات معينة</string>
+    <string name="auto_start_apps_description">بدء الكشف تلقائياً عند فتح تطبيقات معينة</string>
     <string name="select_apps">اختر التطبيقات</string>
     <string name="no_apps_selected">لم يتم اختيار تطبيقات</string>
     <string name="apps_selected">تم اختيار %1$d تطبيقات</string>
@@ -58,16 +61,33 @@
     <string name="low_pixelation">تشويش منخفض</string>
     <string name="normal_mode">الوضع العادي</string>
     <string name="ok">حسناً</string>
-    <string name="detection_starting">جاري البدء …</string>
+    <string name="detection_starting">جاري البَدْء …</string>
     <string name="detection_started">تم بدء التسجيل</string>
     <string name="detection_setup_failed">حدث خطأ أثناء بدء الكشف.</string>
 
     <string name="getting_started_title">مرحباً بك في Shade</string>
     <string name="getting_started_step1_title">كيف يعمل</string>
-    <string name="getting_started_step1_description">يكتشف Shade المحتوى الغير لائق على شاشتك ويقوم بتشويشه في الوقت الفعلي.</string>
+    <string name="getting_started_step1_description">يكتشف التطبيق المحتوى الغير لائق على شاشتك ويقوم بتشويشه في الوقت الفعلي.</string>
     <string name="getting_started_step2_title">خصّص تجربتك</string>
     <string name="getting_started_step2_description">اضبط حساسية الكشف وشفافية الغطاء ومستوى التشويش في الإعدادات حسب تفضيلاتك.</string>
     <string name="getting_started_step3_title">بدء الكشف</string>
     <string name="getting_started_step3_description">اضغط \"بدء التقاط الشاشة\" واختر \"تطبيق واحد\" لأفضل تجربة. إذا اخترت \"الشاشة بالكامل\"، فعّل \"وضع الشاشة الكاملة\" في الإعدادات المتقدمة أولاً.</string>
     <string name="getting_started_got_it">أبدأ</string>
+
+    <string name="onboarding_title">إعداد الحماية</string>
+    <string name="onboarding_subtitle">اختر كيف يجب أن يكتشف التطبيق المحتوى الحساس ويخفيه.</string>
+    <string name="onboarding_confidence_description">حدد مدى صرامة الكشف. القيم المنخفضة تكتشف أكثر لكنها قد تلتقط محتوى غير حساس. القيم المرتفعة تقلل الإنذارات الخاطئة لكنها قد تفوّت بعض الحالات.</string>
+    <string name="onboarding_overlay_opacity_description">تحكم في وضوح الغطاء. الشفافية الأعلى تخفي المحتوى بشكل أقوى، والشفافية الأقل تُبقي جزءًا أكبر من الشاشة مرئيًا.</string>
+    <string name="onboarding_pixelation_level_description">اختر قوة تأثير التشويش. تشويش أعلى يعطي خصوصية أقوى ويقلل استهلاك الموارد.</string>
+    <string name="onboarding_detailed_mode_description">بدّل بين تغطية مستطيلة سريعة وتغطية تعتمد على الشكل. الوضع التفصيلي أدق في تتبع الأشخاص لكنه يستهلك موارد أكثر.</string>
+    <string name="onboarding_next">التالي</string>
+    <string name="onboarding_done">تم</string>
+    <string name="single_app_recommended_title">قبل البدء</string>
+    <string name="single_app_recommended_description">لأفضل جودة في الكشف، اختر \"تطبيق واحد\" في شاشة اختيار الالتقاط التالية.\n\nإذا كنت تحتاج فعلاً إلى \"الشاشة بالكامل\"، فعِّل \"وضع الشاشة الكاملة\" من الإعدادات المتقدمة قبل البدء. وحتى مع ذلك، قد تبقى التجربة والجودة أقل من وضع \"تطبيق واحد\".</string>
+    <string name="continue_action">متابعة</string>
+    <string name="screen_capture_initializing">جارٍ تهيئة الالتقاط…</string>
+    <string name="model_loading_first_time_normal">جارِ تجهيز النموذج</string>
+    <string name="model_loading_first_time_detailed">جارٍ تجهيز النموذج التفصيلي</string>
+    <string name="model_loading_first_time_large">جارٍ تجهيز النموذج الكبير.</string>
+    <string name="model_loading_description">قد يستغرق التجهيز الأول لكل نوع نموذج بضع دقائق\nتكون مرات بدء الكشف التالية أسرع بعد ذلك</string>
 </resources>

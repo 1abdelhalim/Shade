@@ -215,10 +215,11 @@ class Detector(
             val compatList = CompatibilityList()
             if (compatList.isDelegateSupportedOnThisDevice) {
                 val options = compatList.bestOptionsForThisDevice
-                val cacheDir = File(context.cacheDir, "gpu_delegate_cache")
-                if (!cacheDir.exists()) cacheDir.mkdirs()
                 val modelToken = modelPath.substringBeforeLast('.').replace('/', '_')
+                val cacheDir = File(context.filesDir, "gpu_delegate_cache/$modelToken")
+                if (!cacheDir.exists()) cacheDir.mkdirs()
                 options.setSerializationParams(cacheDir.absolutePath, modelToken)
+                options.isPrecisionLossAllowed = true
 
                 val delegate = GpuDelegate(options)
                 Log.d(TAG, "Using GPU delegate")

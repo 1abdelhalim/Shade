@@ -6,6 +6,7 @@ import com.mhss.app.shade.util.PreferenceManager
 import android.os.Build
 import com.mhss.app.shade.detection.DEFAULT_CONFIDENCE_PERCENT
 import com.mhss.app.shade.detection.DEFAULT_DOWNSAMPLE_FACTOR
+import com.mhss.app.shade.service.CaptureState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -15,7 +16,7 @@ import com.mhss.app.shade.service.ScreenCaptureService
 import org.koin.android.annotation.KoinViewModel
 
 data class MainUiState(
-    val isCapturing: Boolean = false,
+    val captureState: CaptureState = CaptureState.IDLE,
     val confidence: Float = DEFAULT_CONFIDENCE_PERCENT,
     val performanceModeEnabled: Boolean = false,
     val detailedModeEnabled: Boolean = false,
@@ -24,7 +25,10 @@ data class MainUiState(
     val pixelationLevel: Int = DEFAULT_DOWNSAMPLE_FACTOR,
     val isAccessibilityEnabled: Boolean = false,
     val isSingleAppRecordingSupported: Boolean = true,
-    val showInitialDialog: Boolean = false,
+    val showOnboardingFlow: Boolean = false,
+    val showUnsupportedDeviceDialog: Boolean = false,
+    val shouldShowSingleAppCaptureTipOnStart: Boolean = false,
+    val showSingleAppCaptureTipDialog: Boolean = false,
     val autoStartApps: Set<String> = emptySet(),
     val showAppSelectionDialog: Boolean = false
 )
@@ -46,8 +50,15 @@ class MainViewModel(
         }
 
         viewModelScope.launch {
-            if (!preferenceManager.hasShownInitialDialog()) {
-                _uiState.update { it.copy(showInitialDialog = true) }
+            val hasCompletedOnboarding = preferenceManager.hasCompletedOnboardingFlow()
+            val hasShownUnsupportedDialog = preferenceManager.hasShownUnsupportedDeviceDialog()
+            val hasSeenSingleAppCaptureTip = preferenceManager.hasSeenSingleAppCaptureTip()
+            _uiState.update {
+                it.copy(
+                    showOnboardingFlow = !hasCompletedOnboarding,
+                    showUnsupportedDeviceDialog = !isSingleAppRecordingSupported && !hasShownUnsupportedDialog,
+                    shouldShowSingleAppCaptureTipOnStart = isSingleAppRecordingSupported && !hasSeenSingleAppCaptureTip
+                )
             }
         }
 
@@ -94,8 +105,8 @@ class MainViewModel(
         }
 
         viewModelScope.launch {
-            ScreenCaptureService.isRunningFlow.collectLatest { isRunning ->
-                _uiState.update { state -> state.copy(isCapturing = isRunning) }
+            ScreenCaptureService.captureStateFlow.collectLatest { captureState ->
+                _uiState.update { state -> state.copy(captureState = captureState) }
             }
         }
     }
@@ -132,10 +143,42 @@ class MainViewModel(
         _uiState.update { it.copy(isAccessibilityEnabled = enabled) }
     }
 
-    fun dismissInitialDialog() {
-        _uiState.update { it.copy(showInitialDialog = false) }
+    fun completeOnboardingFlow() {
+        _uiState.update { it.copy(showOnboardingFlow = false) }
         viewModelScope.launch {
-            preferenceManager.setHasShownInitialDialog(true)
+            preferenceManager.setHasCompletedOnboardingFlow(true)
+        }
+    }
+
+    fun dismissUnsupportedDeviceDialog() {
+        _uiState.update { it.copy(showUnsupportedDeviceDialog = false) }
+        viewModelScope.launch {
+            preferenceManager.setHasShownUnsupportedDeviceDialog(true)
+        }
+    }
+
+    fun showSingleAppCaptureTipDialog() {
+        _uiState.update { it.copy(showSingleAppCaptureTipDialog = true) }
+    }
+
+    fun acknowledgeSingleAppCaptureTip() {
+        _uiState.update {
+            it.copy(
+                showSingleAppCaptureTipDialog = false,
+                shouldShowSingleAppCaptureTipOnStart = false
+            )
+        }
+        viewModelScope.launch {
+            preferenceManager.setHasSeenSingleAppCaptureTip(true)
+        }
+    }
+
+    fun dismissSingleAppCaptureTip() {
+        _uiState.update {
+            it.copy(
+                showSingleAppCaptureTipDialog = false,
+                shouldShowSingleAppCaptureTipOnStart = false
+            )
         }
     }
 
@@ -172,5 +215,3 @@ class MainViewModel(
                 (Build.VERSION.SDK_INT == 34 && Build.MANUFACTURER.equals("Google", ignoreCase = true))
     }
 }
-
-

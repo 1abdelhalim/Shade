@@ -50,15 +50,17 @@ import com.mhss.app.shade.R
 import com.mhss.app.shade.presentation.components.AutoStartAppsCard
 import com.mhss.app.shade.presentation.components.CaptureStatusCard
 import com.mhss.app.shade.presentation.components.DetectionConfidenceCard
-import com.mhss.app.shade.presentation.components.GettingStartedDialog
 import com.mhss.app.shade.presentation.components.GitHubFooter
+import com.mhss.app.shade.presentation.components.ModelLoadingDialog
 import com.mhss.app.shade.presentation.components.OverlayOpacityCard
 import com.mhss.app.shade.presentation.components.PixelationLevelCard
 import com.mhss.app.shade.presentation.components.PreviewDialog
+import com.mhss.app.shade.presentation.components.SingleAppCaptureTipDialog
 import com.mhss.app.shade.presentation.components.SettingsSectionHeader
 import com.mhss.app.shade.presentation.components.SettingsToggleCard
 import com.mhss.app.shade.presentation.components.UnsupportedBanner
 import com.mhss.app.shade.presentation.components.UnsupportedDialog
+import com.mhss.app.shade.service.CaptureState
 import com.mhss.app.shade.service.ShadeAccessibilityService
 import com.mhss.app.shade.presentation.theme.ShadeTheme
 import com.mhss.app.shade.util.ScreenCaptureManager
@@ -84,7 +86,6 @@ class MainActivity : ComponentActivity() {
 
         screenCaptureManager = ScreenCaptureManager(
             activity = this,
-            onCaptureStarted = { moveToBackground() },
             onCapturePermissionDenied = {
                 Toast.makeText(
                     this,
@@ -105,10 +106,25 @@ class MainActivity : ComponentActivity() {
                         onAccessibilityClick = { openAccessibilitySettings() },
                         onNotificationClick = { requestNotificationPermission() }
                     )
+                } else if (uiState.showOnboardingFlow) {
+                    OnboardingFlowScreen(
+                        uiState = uiState,
+                        onConfidenceChanged = { value -> viewModel.updateConfidence(value) },
+                        onOverlayOpacityChanged = { value -> viewModel.updateOverlayOpacity(value) },
+                        onPixelationLevelChanged = { value -> viewModel.updatePixelationLevel(value) },
+                        onDetailedModeChanged = { enabled -> viewModel.updateDetailedMode(enabled) },
+                        onDone = { viewModel.completeOnboardingFlow() }
+                    )
                 } else {
                     MainScreen(
                         uiState = uiState,
-                        onStartCapture = { startScreenCapture() },
+                        onStartCapture = {
+                            if (uiState.shouldShowSingleAppCaptureTipOnStart) {
+                                viewModel.showSingleAppCaptureTipDialog()
+                            } else {
+                                startScreenCapture()
+                            }
+                        },
                         onStopCapture = { stopScreenCapture() },
                         onConfidenceChanged = { value -> viewModel.updateConfidence(value) },
                         onPerformanceModeChanged = { enabled -> viewModel.updatePowerMode(enabled) },
@@ -123,7 +139,12 @@ class MainActivity : ComponentActivity() {
                         onAutoStartAppsClick = { viewModel.toggleAppSelectionDialog(true) },
                         onAutoStartAppsChanged = { apps -> viewModel.updateAutoStartApps(apps) },
                         onDismissAppSelectionDialog = { viewModel.toggleAppSelectionDialog(false) },
-                        onDismissInitialDialog = { viewModel.dismissInitialDialog() }
+                        onDismissUnsupportedDialog = { viewModel.dismissUnsupportedDeviceDialog() },
+                        onDismissSingleAppCaptureTipDialog = { viewModel.dismissSingleAppCaptureTip() },
+                        onContinueSingleAppCaptureTipDialog = {
+                            viewModel.acknowledgeSingleAppCaptureTip()
+                            startScreenCapture()
+                        }
                     )
                 }
             }
@@ -174,10 +195,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun moveToBackground() {
-        moveTaskToBack(true)
-    }
-
     private fun startScreenCapture() {
         screenCaptureManager.requestScreenCapturePermission()
     }
@@ -203,14 +220,30 @@ fun MainScreen(
     onAutoStartAppsClick: () -> Unit,
     onAutoStartAppsChanged: (Set<String>) -> Unit,
     onDismissAppSelectionDialog: () -> Unit,
-    onDismissInitialDialog: () -> Unit
+    onDismissUnsupportedDialog: () -> Unit,
+    onDismissSingleAppCaptureTipDialog: () -> Unit,
+    onContinueSingleAppCaptureTipDialog: () -> Unit
 ) {
-    if (uiState.showInitialDialog) {
-        if (uiState.isSingleAppRecordingSupported) {
-            GettingStartedDialog(onDismiss = onDismissInitialDialog)
-        } else {
-            UnsupportedDialog(onDismiss = onDismissInitialDialog)
+    if (uiState.showUnsupportedDeviceDialog) {
+        UnsupportedDialog(onDismiss = onDismissUnsupportedDialog)
+    }
+
+    if (uiState.showSingleAppCaptureTipDialog) {
+        SingleAppCaptureTipDialog(
+            onDismiss = onDismissSingleAppCaptureTipDialog,
+            onContinue = onContinueSingleAppCaptureTipDialog
+        )
+    }
+
+    if (uiState.captureState == CaptureState.INITIALIZING) {
+        val firstLoadMessageRes = when {
+            uiState.detailedModeEnabled -> R.string.model_loading_first_time_detailed
+            uiState.performanceModeEnabled -> R.string.model_loading_first_time_large
+            else -> R.string.model_loading_first_time_normal
         }
+        ModelLoadingDialog(
+            firstLoadMessageRes = firstLoadMessageRes
+        )
     }
 
     if (uiState.showAppSelectionDialog) {
@@ -257,7 +290,7 @@ fun MainScreen(
             }
 
             CaptureStatusCard(
-                isCapturing = uiState.isCapturing,
+                captureState = uiState.captureState,
                 onStartCapture = onStartCapture,
                 onStopCapture = onStopCapture
             )

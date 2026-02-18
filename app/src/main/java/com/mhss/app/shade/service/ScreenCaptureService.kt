@@ -21,6 +21,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import android.os.Handler
 import android.os.HandlerThread
+import android.app.NotificationManager
 import com.mhss.app.shade.R
 import com.mhss.app.shade.detection.DetectionBox
 import com.mhss.app.shade.detection.Detector
@@ -99,8 +100,9 @@ class ScreenCaptureService : Service() {
             }
 
             if (resultCode != 0 && data != null) {
-                startForeground(NOTIFICATION_ID, createCaptureServiceNotification())
-                Toast.makeText(this, R.string.detection_starting, Toast.LENGTH_LONG).show()
+                startForeground(NOTIFICATION_ID, createCaptureServiceNotification(isInitializing = true))
+                Toast.makeText(this, R.string.detection_starting, Toast.LENGTH_SHORT).show()
+                _captureStateFlow.value = CaptureState.INITIALIZING
                 val metrics = resources.displayMetrics
                 screenDensity = metrics.densityDpi
 
@@ -447,7 +449,8 @@ class ScreenCaptureService : Service() {
     private fun startCapturing() {
         if (isCapturing) return
         isCapturing = true
-        _isRunningFlow.value = true
+        _captureStateFlow.value = CaptureState.RUNNING
+        updateForegroundNotification(isInitializing = false)
         OverlayManager.isServiceStartingInProgress = false
 
         Handler(Looper.getMainLooper()).post {
@@ -467,9 +470,9 @@ class ScreenCaptureService : Service() {
                 detector?.clear()
 
                 val modelPath = when {
-                    segmentationMode -> SEGMENTATION_MODEL_PATH
-                    useBigModel -> LARGE_MODEL_PATH
-                    else -> SMALL_MODEL_PATH
+                    segmentationMode -> ModelFiles.SEGMENTATION_MODEL_PATH
+                    useBigModel -> ModelFiles.LARGE_MODEL_PATH
+                    else -> ModelFiles.SMALL_MODEL_PATH
                 }
 
                 val tempDetector = Detector(
@@ -497,13 +500,16 @@ class ScreenCaptureService : Service() {
                     onSegmentationResult = if (segmentationMode) {
                         { segmentations, sourceBitmap ->
                             if (isTargetAppVisible) {
-                                if (fullScreenModeEnabled) {
-                                    frameSimilarityChecker.onDetectionSuccess(
+                                val segmentationsToShow = if (fullScreenModeEnabled) {
+                                    val mergedBoxes = frameSimilarityChecker.onDetectionSuccess(
                                         sourceBitmap,
                                         segmentations.map { it.box }
                                     )
+                                    segmentations.filter { it.box in mergedBoxes }
+                                } else {
+                                    segmentations
                                 }
-                                updateSegmentations(segmentations, sourceBitmap)
+                                updateSegmentations(segmentationsToShow, sourceBitmap)
                             } else {
                                 tryRecycleBitmap(sourceBitmap)
                             }
@@ -580,7 +586,7 @@ class ScreenCaptureService : Service() {
         clearOverlay()
         frameSimilarityChecker.clear()
         isCapturing = false
-        _isRunningFlow.value = false
+        _captureStateFlow.value = CaptureState.IDLE
         OverlayManager.isServiceStartingInProgress = false
 
         mainHandler.post {
@@ -643,9 +649,17 @@ class ScreenCaptureService : Service() {
         mainHandler.post { OverlayManager.clear() }
     }
 
+    private fun updateForegroundNotification(isInitializing: Boolean) {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(
+            NOTIFICATION_ID,
+            createCaptureServiceNotification(isInitializing = isInitializing)
+        )
+    }
+
     private fun stopCapture() {
         isCapturing = false
-        _isRunningFlow.value = false
+        _captureStateFlow.value = CaptureState.IDLE
         OverlayManager.isServiceStartingInProgress = false
         stopDisplayListener()
         stopBackgroundThread()
@@ -688,18 +702,14 @@ class ScreenCaptureService : Service() {
         const val EXTRA_RESULT_CODE = "resultCode"
         const val EXTRA_DATA = "data"
 
-        private const val LARGE_MODEL_PATH = "shade_large_v2.tflite"
-        private const val SMALL_MODEL_PATH = "shade_small_v2.tflite"
-        private const val SEGMENTATION_MODEL_PATH = "shade_seg_v1.tflite"
-
         private const val SMALL_MODEL_IMGZ = 416
 
         private const val EMPTY_FRAMES_THRESHOLD = 3
         private const val FULLSCREEN_EMPTY_FRAMES_THRESHOLD = 4
 
-        private val _isRunningFlow = MutableStateFlow(false)
-        val isRunningFlow: StateFlow<Boolean> = _isRunningFlow.asStateFlow()
+        private val _captureStateFlow = MutableStateFlow(CaptureState.IDLE)
+        val captureStateFlow: StateFlow<CaptureState> = _captureStateFlow.asStateFlow()
 
-        val isRunning: Boolean get() = _isRunningFlow.value
+        val isIdle: Boolean get() = _captureStateFlow.value == CaptureState.IDLE
     }
 }

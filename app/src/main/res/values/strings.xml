@@ -28,10 +28,13 @@
     <string name="accessibility_service_required">Please enable the accessibility service in Settings first</string>
     <string name="tile_label">Start Shade</string>
     <string name="notification_title">Screen Capture Service</string>
+    <string name="notification_title_initializing">Preparing Model</string>
     <string name="notification_text">Capturing screen for processing…</string>
+    <string name="notification_text_initializing">Preparing model. The first time may take a few minutes. Next times are usually faster.</string>
     <string name="notification_action_stop">Stop</string>
     <string name="notification_action_clear">Clear</string>
     <string name="notification_channel_name">Screen Capture</string>
+    <string name="notification_channel_name_initializing">Model Preparation</string>
     <string name="accessibility_service_description">Shade uses this accessibility service to draw overlay content at full opacity. On Android 12 and above, regular overlays are limited to 80% opacity, which may not fully obscure detected content. Enabling this service allows Shade to display the overlay at any opacity level you choose.\n\nScreen content is captured for on-device processing only. No data is sent anywhere — Shade does not have internet permission.</string>
     <string name="permission_setup_title">Let\'s Get Started</string>
     <string name="permission_setup_subtitle">Shade needs a few permissions to work</string>
@@ -72,4 +75,21 @@
     <string name="getting_started_step3_title">Starting Detection</string>
     <string name="getting_started_step3_description">Tap "Start Capture" and select "Single app" for the best experience. If you use "Entire screen", enable "Full Screen Mode" in Advanced settings first.</string>
     <string name="getting_started_got_it">Let\'s Go</string>
+
+    <string name="onboarding_title">Set Up Your Protection</string>
+    <string name="onboarding_subtitle">Choose how Shade should detect and hide sensitive content.</string>
+    <string name="onboarding_confidence_description">Set how strict detection should be. Lower values detect more but can trigger on safe content. Higher values reduce false alerts but may miss some content.</string>
+    <string name="onboarding_overlay_opacity_description">Control how visible the cover is. Higher opacity hides content more completely, while lower opacity keeps more of the screen visible.</string>
+    <string name="onboarding_pixelation_level_description">Pick how strong the blur effect looks. Higher pixelation usually lowers processing load and gives stronger privacy.</string>
+    <string name="onboarding_detailed_mode_description">Switch between fast rectangular coverage and shape-based coverage. Detailed Mode better follows people but uses more processing power.</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_done">Done</string>
+    <string name="single_app_recommended_title">Before Starting</string>
+    <string name="single_app_recommended_description">For the best detection quality, choose \"Single app\" in the next capture picker.\n\nIf you really need \"Entire screen\", enable \"Full Screen Mode\" in Advanced settings before starting. Even then, the experience and quality may still be less optimal than \"Single app\".</string>
+    <string name="continue_action">Continue</string>
+    <string name="screen_capture_initializing">Initializing capture…</string>
+    <string name="model_loading_first_time_normal">Loading the model</string>
+    <string name="model_loading_first_time_detailed">Loading the detailed model</string>
+    <string name="model_loading_first_time_large">Loading the large model</string>
+    <string name="model_loading_description">The first load for each model type can take a few minutes.\nStarting detection is usually much faster next times</string>
 </resources>

@@ -69,12 +69,12 @@ class ShadeAccessibilityService : AccessibilityService() {
         lastPackageName = packageName
         if (packageName !in autoStartApps.value) return
 
-        if (ScreenCaptureService.isRunning) return
         if (OverlayManager.isServiceStartingInProgress) return
+        if (!ScreenCaptureService.isIdle) return
 
         autoStartJob?.cancel()
         autoStartJob = serviceScope.launch {
-            delay(1000)
+            delay(500)
 
             val intent =
                 Intent(

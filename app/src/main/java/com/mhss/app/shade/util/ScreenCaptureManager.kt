@@ -11,7 +11,6 @@ import com.mhss.app.shade.service.ScreenCaptureService
 
 class ScreenCaptureManager(
     private val activity: ComponentActivity,
-    private val onCaptureStarted: (() -> Unit),
     private val onCapturePermissionDenied: (() -> Unit)
 ) {
 
@@ -40,7 +39,6 @@ class ScreenCaptureManager(
             putExtra(ScreenCaptureService.EXTRA_DATA, data)
         }
         activity.startForegroundService(serviceIntent)
-        onCaptureStarted.invoke()
     }
 
     fun stopScreenCapture() {
