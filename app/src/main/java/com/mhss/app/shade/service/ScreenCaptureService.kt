@@ -117,8 +117,7 @@ class ScreenCaptureService : Service() {
                     overlayOpacity = preferenceManager.getOverlayOpacity()
                     fullScreenModeEnabled = preferenceManager.isFullScreenModeEnabled()
                     detailedModeEnabled = preferenceManager.isDetailedModeEnabled()
-                    performanceModeEnabled =
-                        if (detailedModeEnabled) false else preferenceManager.isPerformanceModeEnabled()
+                    performanceModeEnabled = preferenceManager.isPerformanceModeEnabled()
                     val pixelationLevel = preferenceManager.getPixelationLevel()
 
                     withContext(Dispatchers.Main) {
