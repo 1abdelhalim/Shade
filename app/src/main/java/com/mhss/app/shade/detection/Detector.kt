@@ -18,6 +18,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.math.ln
 
 class Detector(
     private val context: Context,
@@ -504,7 +505,7 @@ class Detector(
                         maskValue +=
                             protoArray[(protoY * protoWidth + protoX) * protoChannels + c] * maskCoeffs[c]
                     }
-                    mask[y * maskWidth + x] = maskValue > 0f
+                    mask[y * maskWidth + x] = maskValue > SEG_LOGIT_THRESHOLD
                 }
             }
 
@@ -523,3 +524,5 @@ private const val DEFAULT_CONF_THRESHOLD = DEFAULT_CONFIDENCE_PERCENT / 100f
 private val IMAGE_TYPE = DataType.FLOAT32
 private const val MAX_DETECTIONS = 12
 private const val NMS_IOU_THRESHOLD = 0.45f
+private const val SEGMENTATION_THRESHOLD = 0.33f
+private val SEG_LOGIT_THRESHOLD = ln(SEGMENTATION_THRESHOLD / (1f - SEGMENTATION_THRESHOLD))

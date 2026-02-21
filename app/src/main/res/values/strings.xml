@@ -52,11 +52,10 @@
     <string name="select_apps">Select Apps</string>
     <string name="no_apps_selected">No apps selected</string>
     <string name="apps_selected">%1$d apps selected</string>
-    <string name="search_apps">Search apps</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="pixelation_level">Pixelation Level</string>
-    <string name="pixelation_level_description">Control how much content is blurred. Large pixels completely hide details, while small ones retain some colors.\n\nLarge pixels are easier to process and save battery.</string>
+    <string name="pixelation_level_description">Control how much content is blurred. Large pixels completely hide details, while small ones retain some features.</string>
     <string name="pixelation_label_low">Low</string>
     <string name="pixelation_label_high">High</string>
     <string name="high_pixelation">High Pixelation</string>
@@ -67,12 +66,12 @@
     <string name="detection_started">Detection started</string>
     <string name="detection_setup_failed">Something went wrong while starting detection.</string>
 
-    <string name="onboarding_title">Set Up Your Protection</string>
+    <string name="onboarding_title">App Setup</string>
     <string name="onboarding_subtitle">Choose how Shade should detect and hide content</string>
     <string name="onboarding_confidence_description">Set how strict detection should be. Lower values detect more but can mistakenly trigger on normal content. Higher values reduce false alerts but may miss some content.</string>
     <string name="onboarding_overlay_opacity_description">Control how visible the cover is. Higher opacity hides content more completely, while lower opacity keeps more of the screen visible.</string>
-    <string name="onboarding_pixelation_level_description">Select the size of the pixels used to hide content. Large pixels completely hide details and blur the image, while small pixels retain some general features and colors.\n\nPerformance-wise: Large pixels are easier to process and consume less battery.</string>
-    <string name="onboarding_detailed_mode_description">Choose how content is covered. Normal mode uses full rectangular boxes, which might accidentally hide nearby elements. Detailed mode recognizes the exact shape of people and only covers them.\n\nPerformance-wise: Detailed mode requires more processing power.</string>
+    <string name="onboarding_pixelation_level_description">Select the size of the pixels used to hide content. Large pixels hide details and blur the image, small pixels retain some general features and colors.\nLarge pixels are easier to process and consume less resources.</string>
+    <string name="onboarding_detailed_mode_description">Normal mode uses full rectangular boxes, which might hide nearby elements. Detailed mode recognizes the exact shape of people and only covers them.\nDetailed mode requires more processing power.</string>
     <string name="onboarding_next">Next</string>
     <string name="onboarding_done">Done</string>
     <string name="single_app_recommended_title">Before Starting</string>

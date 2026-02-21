@@ -20,6 +20,7 @@ real-time — no web views or wrappers required. Just native, private content fi
     <img alt="License: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-blue.svg?style=for-the-badge" />
   </a>
   <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/mhss1/Shade?style=for-the-badge&color=d48600" />
+  <a href="https://github.com/mhss1/Shade/releases"><img src="https://img.shields.io/github/downloads/mhss1/Shade/total?logo=github&style=for-the-badge" alt="Downloads"></a>
 </p>
 
 ## Key Features

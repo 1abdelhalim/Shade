@@ -33,7 +33,7 @@
     <string name="notification_action_clear">مسح</string>
     <string name="notification_channel_name">التقاط الشاشة</string>
     <string name="notification_channel_name_initializing">تجهيز النموذج</string>
-    <string name="accessibility_service_description">يستخدم Shade خدمة إمكانية الوصول هذه لعرض الغطاء بشكل معتم بالكامل. في أندرويد 12 وما فوق، الأغطية العادية محدودة بشفافية 80%، مما قد لا يخفي المحتوى المكتشف بالكامل. تفعيل هذه الخدمة يسمح لـ Shade بعرض الغطاء بأي مستوى شفافية تختاره.\n\nيتم التقاط محتوى الشاشة للمعالجة على الجهاز فقط. لا يتم إرسال أي بيانات لأي مكان — لا يملك التطبيق إذن الإنترنت.</string>
+    <string name="accessibility_service_description">يستخدم Shade خدمة إمكانية الوصول هذه لعرض الغطاء بشكل معتم بالكامل. تفعيل هذه الخدمة يسمح لـ Shade بعرض الغطاء بأي مستوى شفافية تختاره.\n\nيتم التقاط محتوى الشاشة للمعالجة على الجهاز فقط. لا يتم إرسال أي بيانات لأي مكان — لا يملك التطبيق إذن الإنترنت.</string>
     <string name="permission_setup_title">لنبدأ</string>
     <string name="permission_setup_subtitle">يحتاج Shade لبعض الأذونات ليعمل</string>
     <string name="permission_granted">تم المنح</string>
@@ -50,11 +50,10 @@
     <string name="select_apps">اختر التطبيقات</string>
     <string name="no_apps_selected">لم يتم اختيار تطبيقات</string>
     <string name="apps_selected">تم اختيار %1$d تطبيقات</string>
-    <string name="search_apps">بحث</string>
     <string name="save">حفظ</string>
     <string name="cancel">إلغاء</string>
     <string name="pixelation_level">مستوى التشويش</string>
-    <string name="pixelation_level_description">تحكم في مدى تشويش المحتوى. المربعات الكبيرة تخفي التفاصيل تماماً، بينما الصغيرة تحافظ على بعض الألوان.</string>
+    <string name="pixelation_level_description">تحكم في مدى تشويش المحتوى. المربعات الكبيرة تخفي التفاصيل تماماً، بينما الصغيرة تحافظ على بعض الملامح.</string>
     <string name="pixelation_label_low">منخفض</string>
     <string name="pixelation_label_high">عالي</string>
     <string name="high_pixelation">تشويش عالي</string>
@@ -65,16 +64,16 @@
     <string name="detection_started">تم بدء التسجيل</string>
     <string name="detection_setup_failed">حدث خطأ أثناء بدء الكشف.</string>
 
-    <string name="onboarding_title">إعداد الحماية</string>
+    <string name="onboarding_title">إعداد التطبيق</string>
     <string name="onboarding_subtitle">اختر كيف يجب أن يكتشف التطبيق المحتوى ويخفيه</string>
     <string name="onboarding_confidence_description">حدد مدى صرامة الكشف. القيم المنخفضة تكتشف أكثر لكنها قد تلتقط محتوى عادي عن طريق الخطأ. القيم المرتفعة تقلل الإنذارات الخاطئة لكنها قد تفوّت بعض الحالات.</string>
     <string name="onboarding_overlay_opacity_description">تحكم في وضوح الغطاء. الشفافية الأعلى تخفي المحتوى بشكل أقوى، والشفافية الأقل تُبقي جزءًا أكبر من الشاشة مرئيًا.</string>
-    <string name="onboarding_pixelation_level_description">حدد حجم المربعات (البكسلات) المستخدمة لإخفاء المحتوى. المربعات الكبيرة تخفي التفاصيل تماماً وتطمس الصورة، بينما المربعات الصغيرة تحافظ على بعض الملامح والألوان العامة.\n\nمن ناحية الأداء: المربعات الكبيرة أسهل في المعالجة وتستهلك بطارية أقل.</string>
-    <string name="onboarding_detailed_mode_description">حدد طريقة تغطية المحتوى. الوضع العادي يضع مربعات كاملة فوق الأشخاص، مما قد يخفي أجزاء أخرى من الشاشة بدون قصد. الوضع التفصيلي يتعرف على الشكل الدقيق للأشخاص ويغطيهم فقط، مما يمنع إخفاء العناصر القريبة.\n\nمن ناحية الأداء: الوضع التفصيلي يتطلب معالجة أكبر ويستهلك موارد أكثر.</string>
+    <string name="onboarding_pixelation_level_description">حدد حجم المربعات (البكسلات) المستخدمة لإخفاء المحتوى. المربعات الكبيرة تخفي التفاصيل تمامًا، المربعات الصغيرة تحافظ على بعض الملامح والألوان.\nالمربعات الكبيرة أسهل في المعالجة وتستهلك موارد أقل.</string>
+    <string name="onboarding_detailed_mode_description">الوضع العادي يضع مربعات كاملة فوق الأشخاص، مما قد يخفي العناصر القرية بالخطأ. الوضع التفصيلي يتعرف على الشكل الدقيق للأشخاص ويغطيهم فقط، مما يمنع إخفاء العناصر القريبة.\nالوضع التفصيلي يتطلب معالجة أكبر ويستهلك موارد أكثر.</string>
     <string name="onboarding_next">التالي</string>
     <string name="onboarding_done">تم</string>
     <string name="single_app_recommended_title">قبل البدء</string>
-    <string name="single_app_recommended_description">لأفضل جودة في الكشف، اختر \"تطبيق واحد\" في شاشة اختيار الالتقاط التالية.\n\nإذا كنت تحتاج فعلاً إلى \"الشاشة بالكامل\"، فعِّل \"وضع الشاشة الكاملة\" من الإعدادات المتقدمة قبل البدء. وحتى مع ذلك، قد تبقى التجربة والجودة أقل من وضع \"تطبيق واحد\".</string>
+    <string name="single_app_recommended_description">لأفضل جودة في الكشف، اختر \"تطبيق واحد\" في شاشة اختيار الالتقاط التالية.\n\nإذا كنت تحتاج فعلاً إلى \"الشاشة بالكامل\"، فعِّل \"وضع الشاشة الكاملة\" من الإعدادات المتقدمة قبل البدء. مع ذلك، قد تبقى التجربة والجودة أقل من وضع \"تطبيق واحد\".</string>
     <string name="continue_action">متابعة</string>
     <string name="screen_capture_initializing">جارٍ تهيئة الالتقاط…</string>
     <string name="model_loading_first_time_normal">جارِ تجهيز النموذج</string>
