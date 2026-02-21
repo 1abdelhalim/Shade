@@ -15,8 +15,8 @@ android {
         applicationId = "com.mhss.app.shade"
         minSdk = 31
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.0-alpha02"
+        versionCode = 3
+        versionName = "1.0.0-beta01"
 
         ndk {
             abiFilters.clear()
