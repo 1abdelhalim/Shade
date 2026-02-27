@@ -1,13 +1,13 @@
 [versions]
-agp = "8.13.2"
+agp = "9.0.1"
 datastorePreferences = "1.2.0"
-kotlin = "2.3.0"
+kotlin = "2.3.10"
 coreKtx = "1.17.0"
 lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.2"
-composeBom = "2026.01.00"
+activityCompose = "1.12.4"
+composeBom = "2026.02.00"
 koinBOM = "4.1.1"
-koinKSP = "2.3.0"
+koinKSP = "2.3.1"
 ksp = "2.3.4"
 accompanist = "0.37.3"
 liteRT = "1.4.1"
@@ -41,7 +41,6 @@ litert-gpu-api = { module = "com.google.ai.edge.litert:litert-gpu-api", version.
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 

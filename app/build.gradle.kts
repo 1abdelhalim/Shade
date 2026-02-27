@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
@@ -15,8 +14,8 @@ android {
         applicationId = "com.moh.sh.app.shade"
         minSdk = 31
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.0.0-beta01"
+        versionCode = 4
+        versionName = "1.0.0-beta02"
 
         ndk {
             abiFilters.clear()
@@ -48,15 +47,18 @@ android {
         @Suppress("UnstableApiUsage")
         generateLocaleConfig = true
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
-            freeCompilerArgs.add("-Xwarning-level=NOTHING_TO_INLINE:disabled")
-        }
-    }
     buildFeatures {
         compose = true
         mlModelBinding = true
+        buildConfig = true
+        resValues = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+        freeCompilerArgs.add("-Xwarning-level=NOTHING_TO_INLINE:disabled")
     }
 }
 
