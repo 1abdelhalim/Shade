@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.mhss.app.shade"
+    namespace = "com.moh.sh.app.shade"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.mhss.app.shade"
+        applicationId = "com.moh.sh.app.shade"
         minSdk = 31
         targetSdk = 36
         versionCode = 3
