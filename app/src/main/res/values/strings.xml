@@ -40,7 +40,10 @@
     <string name="permission_setup_subtitle">Shade needs a few permissions to work</string>
     <string name="permission_granted">Granted</string>
     <string name="permission_accessibility_title">Accessibility Service</string>
-    <string name="permission_accessibility_description">Allows Shade to draw a cover over detected content. In Settings, look for \"Installed apps\" or \"Installed services\", then enable Shade.</string>
+    <string name="permission_accessibility_description">Required so Shade can place a fully opaque cover over detected content and detect app switches for auto-start. Without this service, Android may limit overlays and auto-starting feature won\'t work.\nPrivacy: processing stays on-device only. Shade has no internet permission.</string>
+    <string name="permission_accessibility_dialog_title">Enable Accessibility Service</string>
+    <string name="permission_accessibility_dialog_description">Shade needs Accessibility Service to:\n• place a reliable full-opacity cover over detected content\n• detect when selected apps open (auto-start)\n\nHow to enable:\n1. Tap \"Request permission\".\n2. In Accessibility settings, open \"Installed apps\" or \"Installed services\".\n3. Select Shade and turn it ON.</string>
+    <string name="permission_accessibility_request_button">Request permission</string>
     <string name="permission_notification_title">Notifications</string>
     <string name="permission_notification_description">Required to keep Shade running in the background. You\'ll also see controls to quickly stop or clear the cover.</string>
     <string name="single_app_recording_unsupported_banner">Single app recording is not supported on this device. Using experimental full screen mode.</string>

@@ -38,7 +38,10 @@
     <string name="permission_setup_subtitle">يحتاج Shade لبعض الأذونات ليعمل</string>
     <string name="permission_granted">تم المنح</string>
     <string name="permission_accessibility_title">خدمة إمكانية الوصول</string>
-    <string name="permission_accessibility_description">يسمح لـ Shade برسم غطاء فوق المحتوى المكتشف. في الإعدادات، ابحث عن \"التطبيقات المثبتة\" أو \"الخدمات المثبتة\"، ثم فعّل Shade.</string>
+    <string name="permission_accessibility_description">مطلوب لكي يتمكن Shade من وضع غطاء معتم بالكامل فوق المحتوى المكتشف، وكذلك اكتشاف الانتقال بين التطبيقات للتشغيل التلقائي. بدون هذه الخدمة، قد يفرض أندرويد حدوداً على الغطاء ولن تعمل ميزة التشغيل التلقائي.\nالخصوصية: كل المعالجة تتم على الجهاز فقط، ولا يملك Shade إذن الإنترنت.</string>
+    <string name="permission_accessibility_dialog_title">تفعيل خدمة إمكانية الوصول</string>
+    <string name="permission_accessibility_dialog_description">يحتاج Shade إلى خدمة إمكانية الوصول من أجل:\n• وضع غطاء موثوق وبعتامة كاملة فوق المحتوى المكتشف\n• اكتشاف فتح التطبيقات المحددة (التشغيل التلقائي)\n\nطريقة التفعيل:\n1. اضغط \"طلب الإذن\".\n2. في إعدادات إمكانية الوصول، افتح \"التطبيقات المثبتة\" أو \"الخدمات المثبتة\".\n3. اختر Shade ثم فعّله.</string>
+    <string name="permission_accessibility_request_button">طلب الإذن</string>
     <string name="permission_notification_title">الإشعارات</string>
     <string name="permission_notification_description">مطلوب لإبقاء Shade يعمل في الخلفية. ستظهر لك أيضاً أزرار لإيقاف أو مسح الغطاء بسرعة.</string>
     <string name="single_app_recording_unsupported_banner">تسجيل التطبيق الواحد غير مدعوم على هذا الجهاز. سيتم استخدام وضع الشاشة الكاملة التجريبي.</string>
