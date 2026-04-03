@@ -50,100 +50,6 @@
     const confidenceThreshold = Math.min(1, Math.max(0, confidencePercent / 100));
     return candidates.filter((candidate) => candidate.score >= confidenceThreshold);
   }
-  function toNormalizedBox(pixelBox, frameWidth, frameHeight, score) {
-    return {
-      x1: Math.max(0, Math.min(1, pixelBox.x / frameWidth)),
-      y1: Math.max(0, Math.min(1, pixelBox.y / frameHeight)),
-      x2: Math.max(0, Math.min(1, (pixelBox.x + pixelBox.width) / frameWidth)),
-      y2: Math.max(0, Math.min(1, (pixelBox.y + pixelBox.height) / frameHeight)),
-      score
-    };
-  }
-
-  // src/shared/heuristic-detector.js
-  function detectHeuristicSensitiveRegions(imageData, width, height) {
-    const boxes = [];
-    const visited = new Uint8Array(width * height);
-    const pixels = imageData;
-    const step = 4;
-    const isSensitive = (idx) => {
-      const r = pixels[idx];
-      const g = pixels[idx + 1];
-      const b = pixels[idx + 2];
-      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      const warm = r > 95 && g > 40 && b > 20 && r > b && Math.abs(r - g) > 15;
-      const nearSkin = warm && luma > 55 && luma < 235;
-      const highContrast = Math.max(r, g, b) - Math.min(r, g, b) > 110 && luma > 80;
-      return nearSkin || highContrast;
-    };
-    const minRegionArea = Math.floor(width * height * 22e-4);
-    const downsample = Math.max(3, Math.floor(Math.min(width, height) / 220));
-    for (let y = 0; y < height; y += downsample) {
-      for (let x = 0; x < width; x += downsample) {
-        const cell = y * width + x;
-        if (visited[cell]) {
-          continue;
-        }
-        const idx = cell * step;
-        if (!isSensitive(idx)) {
-          continue;
-        }
-        const queue = [[x, y]];
-        visited[cell] = 1;
-        let minX = x;
-        let minY = y;
-        let maxX = x;
-        let maxY = y;
-        let count = 0;
-        while (queue.length > 0) {
-          const [cx, cy] = queue.pop();
-          count += 1;
-          minX = Math.min(minX, cx);
-          minY = Math.min(minY, cy);
-          maxX = Math.max(maxX, cx);
-          maxY = Math.max(maxY, cy);
-          const neighbors = [
-            [cx - downsample, cy],
-            [cx + downsample, cy],
-            [cx, cy - downsample],
-            [cx, cy + downsample]
-          ];
-          for (const [nx, ny] of neighbors) {
-            if (nx < 0 || nx >= width || ny < 0 || ny >= height) {
-              continue;
-            }
-            const nCell = ny * width + nx;
-            if (visited[nCell]) {
-              continue;
-            }
-            visited[nCell] = 1;
-            const nIdx = nCell * step;
-            if (isSensitive(nIdx)) {
-              queue.push([nx, ny]);
-            }
-          }
-        }
-        const regionArea = (maxX - minX + 1) * (maxY - minY + 1);
-        if (count > 8 && regionArea >= minRegionArea) {
-          const score = Math.min(0.99, 0.35 + count / 250);
-          boxes.push(
-            toNormalizedBox(
-              {
-                x: minX,
-                y: minY,
-                width: Math.max(1, maxX - minX),
-                height: Math.max(1, maxY - minY)
-              },
-              width,
-              height,
-              score
-            )
-          );
-        }
-      }
-    }
-    return boxes;
-  }
 
   // src/shared/yolo-decode.js
   var COCO_MIN_CLASS_COUNT = 80;
@@ -291,8 +197,10 @@
       modelState.model = model;
       modelState.inputHeight = Number(inputShape[1]) || 640;
       modelState.inputWidth = Number(inputShape[2]) || 640;
-    } catch (_err) {
+    } catch (err) {
+      console.error("Shade Sandbox: TFLite Initialization Failed:", err);
       modelState.model = null;
+      modelState.error = err?.message || String(err);
     }
     return modelState;
   }
@@ -355,13 +263,7 @@
       bitmap.close();
       let boxes = await runModelInference(frame, conf);
       if (!boxes) {
-        const candidates = detectHeuristicSensitiveRegions(
-          frame.data,
-          canvas.width,
-          canvas.height
-        );
-        const thresholded = thresholdByConfidence(candidates, conf);
-        boxes = applyNms(thresholded).slice(0, MAX_DETECTIONS);
+        throw new Error("ML Model Failed to Load: " + (modelState.error || "Unknown"));
       }
       event.source.postMessage(
         {

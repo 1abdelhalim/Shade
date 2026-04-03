@@ -50,8 +50,10 @@ async function ensureModelLoaded(wasmBaseUrl, modelSource) {
     modelState.model = model;
     modelState.inputHeight = Number(inputShape[1]) || 640;
     modelState.inputWidth = Number(inputShape[2]) || 640;
-  } catch (_err) {
+  } catch (err) {
+    console.error("Shade Sandbox: TFLite Initialization Failed:", err);
     modelState.model = null;
+    modelState.error = err?.message || String(err);
   }
 
   return modelState;
@@ -126,13 +128,7 @@ async function handleProcess(event) {
 
     let boxes = await runModelInference(frame, conf);
     if (!boxes) {
-      const candidates = detectHeuristicSensitiveRegions(
-        frame.data,
-        canvas.width,
-        canvas.height
-      );
-      const thresholded = thresholdByConfidence(candidates, conf);
-      boxes = applyNms(thresholded).slice(0, MAX_DETECTIONS);
+       throw new Error("ML Model Failed to Load: " + (modelState.error || "Unknown"));
     }
 
     event.source.postMessage(

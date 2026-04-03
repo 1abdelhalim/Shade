@@ -126,13 +126,17 @@ async function processTick() {
   });
 
   try {
-    await chrome.runtime.sendMessage({
+    const res = await chrome.runtime.sendMessage({
       type: MESSAGE.PROCESS_FRAME,
       tabId: activeTab.id,
       dataUrl,
       settings
     });
-  } catch {
+    if (res && res.error) {
+       console.warn("Shade ML Error:", res.error);
+    }
+  } catch (err) {
+    console.warn("Shade Offscreen Error:", err);
     await ensureOffscreenDocument();
   }
 }
