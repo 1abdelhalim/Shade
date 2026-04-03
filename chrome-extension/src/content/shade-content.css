@@ -1,0 +1,38 @@
+#shade-web-overlay-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+}
+
+.shade-web-region {
+  position: absolute;
+  border-radius: 6px;
+  overflow: hidden;
+  backdrop-filter: blur(var(--shade-blur, 14px)) saturate(0.6);
+  -webkit-backdrop-filter: blur(var(--shade-blur, 14px)) saturate(0.6);
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, calc(var(--shade-opacity, 1) * 0.24)),
+      rgba(0, 0, 0, calc(var(--shade-opacity, 1) * 0.24))
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(35, 35, 35, 0.2),
+      rgba(35, 35, 35, 0.2) calc(var(--shade-pixel, 12px) - 1px),
+      rgba(5, 5, 5, 0.24) calc(var(--shade-pixel, 12px) - 1px),
+      rgba(5, 5, 5, 0.24) var(--shade-pixel, 12px)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(35, 35, 35, 0.2),
+      rgba(35, 35, 35, 0.2) calc(var(--shade-pixel, 12px) - 1px),
+      rgba(5, 5, 5, 0.24) calc(var(--shade-pixel, 12px) - 1px),
+      rgba(5, 5, 5, 0.24) var(--shade-pixel, 12px)
+    );
+}
+
+[data-shade-dom-sensitive="1"] {
+  transition: filter 80ms ease;
+  filter: blur(var(--shade-dom-blur, 12px)) saturate(0.55);
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shade Web</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Shade Web</h1>
+      <label class="toggle-row">
+        <span>Protect this tab</span>
+        <input id="protectToggle" type="checkbox" />
+      </label>
+      <label class="field">
+        <span>Confidence</span>
+        <input id="confidence" type="range" min="0" max="100" step="1" />
+        <small id="confidenceValue"></small>
+      </label>
+      <label class="field">
+        <span>Overlay opacity</span>
+        <input id="opacity" type="range" min="0" max="100" step="1" />
+        <small id="opacityValue"></small>
+      </label>
+      <label class="toggle-row">
+        <span>Performance mode</span>
+        <input id="performanceToggle" type="checkbox" />
+      </label>
+      <a href="../options/options.html" target="_blank" rel="noreferrer">Open advanced settings</a>
+    </main>
+    <script type="module" src="./popup.js"></script>
+  </body>
+</html>

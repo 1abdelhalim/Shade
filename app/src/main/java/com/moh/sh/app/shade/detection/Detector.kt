@@ -324,19 +324,31 @@ class Detector(
      * Coordinates are normalized (0-1 range)
      * Apply NMS
      */
+    private fun yoloClassScore(out: FloatArray, predictionIndex: Int): Float {
+        val numClasses = numChannel - 4
+        if (numClasses <= 0) return 0f
+        val startOffset = if (numClasses >= COCO_MIN_CLASS_COUNT) 1 else 0
+        if (startOffset >= numClasses) return 0f
+        var maxScore = out[(4 + startOffset) * numPredictions + predictionIndex]
+        for (k in startOffset + 1 until numClasses) {
+            val v = out[(4 + k) * numPredictions + predictionIndex]
+            if (v > maxScore) maxScore = v
+        }
+        return maxScore
+    }
+
     private fun extractBoxes(): List<DetectionBox>? {
         outputBuffer.buffer.rewind()
         outputFloatBuffer.rewind()
         outputFloatBuffer.get(outputArray)
 
         val out = outputArray
-        val scoreOffset = 4 * numPredictions
         val result = ArrayList<DetectionBox>(MAX_DETECTIONS)
 
         for (i in 0 until numPredictions) {
             if (result.size >= MAX_DETECTIONS) break
 
-            val score = out[scoreOffset + i]
+            val score = yoloClassScore(out, i)
             if (score < confidenceThreshold) continue
 
             val cx = out[i]
@@ -399,11 +411,10 @@ class Detector(
         protoFloatBuffer.get(protoArray)
 
         val det = detectionArray
-        val scoreOffset = 4 * numPredictions
 
         return try {
             // choose unique candidate boxes only with NMS (no mask generation yet)
-            generateSegmentationCandidateBoxes(det, scoreOffset)
+            generateSegmentationCandidateBoxes(det)
             if (segmentationCandidateBoxes.isEmpty()) return null
 
             // build masks only for selected boxes
@@ -415,11 +426,11 @@ class Detector(
         }
     }
 
-    private fun generateSegmentationCandidateBoxes(detectionValues: FloatArray, scoreOffset: Int) {
+    private fun generateSegmentationCandidateBoxes(detectionValues: FloatArray) {
         for (i in 0 until numPredictions) {
             if (segmentationCandidateBoxes.size >= MAX_DETECTIONS) break
 
-            val score = detectionValues[scoreOffset + i]
+            val score = yoloClassScore(detectionValues, i)
             if (score <= confidenceThreshold) continue
 
             val cx = detectionValues[i]
@@ -519,6 +530,8 @@ class Detector(
 private const val TAG = "Detector"
 private const val INPUT_STANDARD_DEVIATION = 255f
 private const val INPUT_CHANNELS = 3
+/** COCO has 80 classes; class 0 is "person". Using only channel 4 blurs all portraits. */
+private const val COCO_MIN_CLASS_COUNT = 80
 const val DEFAULT_CONFIDENCE_PERCENT = 70F
 private const val DEFAULT_CONF_THRESHOLD = DEFAULT_CONFIDENCE_PERCENT / 100f
 private val IMAGE_TYPE = DataType.FLOAT32

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shade Web Settings</title>
+    <link rel="stylesheet" href="./options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Shade Web Settings</h1>
+      <p class="lead">Offline sensitive-content protection for all sites.</p>
+
+      <section>
+        <h2>Detection</h2>
+        <label class="field">
+          <span>Confidence (%)</span>
+          <input id="confidence_percent" type="range" min="0" max="100" step="1" />
+          <small id="confidence_percent_value"></small>
+        </label>
+        <label class="field toggle">
+          <span>Detailed mode (heavier)</span>
+          <input id="detailed_mode_enabled" type="checkbox" />
+        </label>
+        <label class="field toggle">
+          <span>Performance mode</span>
+          <input id="power_mode_enabled" type="checkbox" />
+        </label>
+      </section>
+
+      <section>
+        <h2>Overlay</h2>
+        <label class="field">
+          <span>Overlay opacity (%)</span>
+          <input id="overlay_opacity" type="range" min="0" max="100" step="1" />
+          <small id="overlay_opacity_value"></small>
+        </label>
+        <label class="field">
+          <span>Pixelation level</span>
+          <input id="pixelation_level" type="range" min="5" max="30" step="1" />
+          <small id="pixelation_level_value"></small>
+        </label>
+      </section>
+
+      <section>
+        <h2>Compatibility</h2>
+        <label class="field toggle">
+          <span>Full-screen mode flag</span>
+          <input id="full_screen_mode_enabled" type="checkbox" />
+        </label>
+      </section>
+    </main>
+    <script type="module" src="./options.js"></script>
+  </body>
+</html>
