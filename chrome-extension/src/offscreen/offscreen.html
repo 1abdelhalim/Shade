@@ -5,12 +5,13 @@
     <title>Shade Offscreen Processor</title>
   </head>
   <body>
-    <iframe
-      id="shade-sandbox-frame"
-      title="Shade ML sandbox"
-      src="../sandbox/shade-inference.html"
-      style="position: absolute; width: 0; height: 0; border: 0; visibility: hidden"
-    ></iframe>
+    <!--
+      Load TF.js and TFLite runtime BEFORE the module script.
+      Classic <script> tags execute synchronously and set globalThis.tf / globalThis.tflite
+      which the module script then reads.
+    -->
+    <script src="../../vendor/tf.min.js"></script>
+    <script src="../../vendor/tf-tflite.min.js"></script>
     <script type="module" src="./offscreen.js"></script>
   </body>
 </html>
