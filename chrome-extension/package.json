@@ -22,7 +22,8 @@
     "@tensorflow/tfjs": "^4.9.0",
     "@tensorflow/tfjs-backend-cpu": "^4.9.0",
     "@tensorflow/tfjs-core": "^4.9.0",
-    "@tensorflow/tfjs-tflite": "^0.0.1-alpha.10"
+    "@tensorflow/tfjs-tflite": "^0.0.1-alpha.10",
+    "jsdom": "^29.0.1"
   },
   "devDependencies": {
     "esbuild": "^0.25.4"

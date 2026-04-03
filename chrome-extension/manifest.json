@@ -41,7 +41,7 @@
     {
       "resources": [
         "src/content/shade-content.css",
-        "vendor/tflite-wasm/*",
+        "vendor/*",
         "models/*"
       ],
       "matches": [

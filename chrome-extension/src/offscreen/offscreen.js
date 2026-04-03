@@ -1,12 +1,6 @@
-/**
- * Shade Offscreen Inference — runs TFLite model directly in the offscreen
- * document.  The offscreen page is a Chrome extension page, so it can fetch
- * resources from the extension package (models, WASM) without origin issues.
- *
- * The extension_pages CSP contains 'wasm-unsafe-eval' which allows WebAssembly
- * compilation.  If the tflite library also needs eval() (older Emscripten
- * builds), we catch that and report it clearly.
- */
+import * as tf from "@tensorflow/tfjs-core";
+import "@tensorflow/tfjs-backend-cpu";
+import * as tflite from "@tensorflow/tfjs-tflite";
 
 import { MESSAGE } from "../shared/constants.js";
 import {
@@ -14,10 +8,6 @@ import {
   thresholdByConfidence
 } from "../shared/detector-postprocess.js";
 import { yoloOutputToCandidates } from "../shared/yolo-decode.js";
-
-/* ── Globals set by <script> tags in offscreen.html ────────── */
-const tf = globalThis.tf;
-const tflite = globalThis.tflite;
 
 /* ── Constants ─────────────────────────────────────────────── */
 const MAX_DETECTIONS = 12;
@@ -43,27 +33,20 @@ async function ensureModelLoaded() {
   modelState.initialized = true;
 
   try {
-    if (!tf) {
-      throw new Error("TensorFlow.js runtime (tf.min.js) not loaded");
-    }
-    if (!tflite) {
-      throw new Error("TFLite runtime (tf-tflite.min.js) not loaded");
-    }
-
-    /* Use CPU backend – it only needs 'wasm-unsafe-eval', not 'unsafe-eval'. */
+    /* Use CPU backend */
     await tf.setBackend("cpu");
     await tf.ready();
 
     /* Tell the TFLite plugin where to find the WASM files.
-       Since this IS an extension page, chrome-extension:// fetch works. */
-    const wasmBaseUrl = chrome.runtime.getURL("vendor/tflite-wasm/");
+       Point to vendor/ where the WASM files live. */
+    const wasmBaseUrl = chrome.runtime.getURL("vendor/");
     tflite.setWasmPath(wasmBaseUrl);
 
     /* Load model – fetch bytes first so we can pass an ArrayBuffer. */
     const modelUrl = chrome.runtime.getURL("models/shade_small_v2.tflite");
     const modelResponse = await fetch(modelUrl);
     if (!modelResponse.ok) {
-      throw new Error(`Failed to fetch model: ${modelResponse.status}`);
+      throw new Error("Failed to fetch model");
     }
     const modelBytes = await modelResponse.arrayBuffer();
 
@@ -76,7 +59,7 @@ async function ensureModelLoaded() {
 
     console.log(
       "Shade: Model loaded ✓",
-      `input ${modelState.inputWidth}×${modelState.inputHeight}`
+      "input " + modelState.inputWidth + "x" + modelState.inputHeight
     );
   } catch (err) {
     console.error("Shade: Model load failed:", err);
